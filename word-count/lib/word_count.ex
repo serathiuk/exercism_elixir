@@ -7,10 +7,10 @@ defmodule WordCount do
   @spec count(String.t()) :: map
   def count(sentence) do
     sentence
-    |> String.replace("_", " ")
     |> String.downcase()
-    |> String.split(" ")
-    |> Enum.map(&(Regex.replace(~r/[^0-9a-zA-Z\-ö]+/, &1, "")))
+    |> String.replace("_", " ")
+    |> String.split(" ", trim: true)
+    |> Enum.map(&(Regex.replace(~r/[^[:alnum:]-]/u, &1, "")))
     |> Enum.filter(&(String.length(&1) > 0))
     |> Enum.reduce(%{}, fn word, map ->
       Map.update(map, word, 1, &(&1 + 1))
